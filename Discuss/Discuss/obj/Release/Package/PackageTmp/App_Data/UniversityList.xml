@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<UniversityList>
+  <University Code="NU" Name="Northeastern University">Northeastern University-NU</University>
+  <University Code="HD" Name="Harvard University">Harvard University-HD</University>
+  <University Code="MIT" Name="Massachusetts Institute of Technology">Massachusetts Institute of Technology-MIT</University>
+  <University Code="BU" Name="Boston University">Boston University-BU</University>
+  <University Code="BC" Name="Boston College">Boston College-BC</University>
+  
+</UniversityList>

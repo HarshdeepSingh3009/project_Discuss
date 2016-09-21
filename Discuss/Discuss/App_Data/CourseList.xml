@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Courses>
+  <Course Code="CS5010" Name="PDP"  Dept="CS"></Course>
+  <Course Code="CS5200" Name="DBMS"  Dept="CS"></Course>
+  <Course Code="CS6200" Name="Web Developement"  Dept="CS"></Course>
+  <Course Code="CS5443" Name="Computer Graphics"  Dept="CS"></Course>
+  <Course Code="CS5432" Name="Algorithms"  Dept="CS"></Course>
+  <Course Code="IS5010" Name="PDP-IS"  Dept="IS"></Course>
+  <Course Code="IS5432" Name="Algorithms-IS"  Dept="IS"></Course>
+  <Course Code="IA5010" Name="PDP-IA"  Dept="IA"></Course>
+  <Course Code="HI5200" Name="DBMS-HI"  Dept="HI"></Course>
+  <Course Code="EM8888" Name="Management Basics"  Dept="EM"></Course>
+  <Course Code="PE5010" Name="Physical Education"  Dept="PE"></Course>
+</Courses>

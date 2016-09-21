@@ -1,0 +1,86 @@
+﻿@model Discuss.Models.DiscussUser
+
+@{
+    ViewBag.Title = "Change User Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title.</h2>
+<script>
+    $(document).ready(function () {
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("HomePage", "Home")';
+        });
+    });
+</script>
+
+@using (Html.BeginForm("ChangeUserDetails", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <h4>Please provide your details.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.university, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.university, Model.UniversityList, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.department, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.department, Model.DepartmentList, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.userrole, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.userrole, Model.RolesList, new { @class = "form-control" })
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.userrole, new { @id = "UserRole" })
+    @Html.HiddenFor(m => m.id, new { @id = "UserId" })
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+             <input type="submit" class="btn btn-default" value="Save Changes" />
+        </div>
+        <div class="col-md-10" style="float:left">
+            <input type="button" class="btn btn-default" value="Cancel" id="btnCancel" />
+        </div>
+    </div>
+
+
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+
+
+
+
+

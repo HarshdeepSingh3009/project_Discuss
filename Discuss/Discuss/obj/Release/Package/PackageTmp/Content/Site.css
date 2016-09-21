@@ -1,0 +1,113 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.new-form-control {
+    display: inline;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555555;
+    vertical-align: middle;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    margin-left: 30px;
+}
+
+    .new-form-control:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+
+    .new-form-control[disabled],
+    .new-form-control[readonly],
+    fieldset[disabled] .form-control {
+        cursor: not-allowed;
+        background-color: #eeeeee;
+    }
+
+textarea.form-control {
+    height: auto;
+}
+
+.new-table {
+    max-width: 70%;
+    background-color: transparent;
+    margin-bottom: 20px;
+    padding: 10%;
+    line-height: 1.428571429;
+    vertical-align: top;
+    border-top: 1px solid #dddddd;
+    margin-left:10%;
+}
+
+.success-msg {
+    text-align:center;
+    text-decoration-color:green;
+    text-decoration-line:underline;
+}
+
+
+.web-grid-table {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size:1.2em;
+    width:100%;
+    display:table;
+    border-collapse:separate;
+    border: solid 1px #000000;
+    background-color:transparent; 
+}
+
+ .web-grid-table td, th {
+        border:1px solid #000000;
+        padding: 3px 7px 2px;
+    }
+
+.webgrid-header {
+    padding-bottom:4px;
+    padding-top:5px;
+    text-align:center;
+}
+
+.webgrid-footer {
+
+}
+
+.webgrid-row-style {
+    padding:3px 7px 2px;
+}
+
+.webgrid-alternating-row {
+    background-color:transparent;
+    padding:3px 7px 2px;
+}

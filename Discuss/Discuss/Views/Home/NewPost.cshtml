@@ -1,0 +1,164 @@
+﻿@model Discuss.Models.Post
+@{
+    ViewBag.Title = "New Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>New Post</h3>
+
+
+
+<style>
+    #txtTopicDescription {
+        width:290px;
+        height:250px;
+        overflow-x:auto;
+        overflow-y:auto;
+        resize:none;
+    }
+     #txtTopicTitle {
+        width:290px;
+        height:50px;
+        overflow-x:auto;
+        overflow-y:auto;
+        resize:none;
+    }
+ </style>
+<script>
+    $(document).ready(function () {
+        $("#rbEntireGroup").click(function () {
+            if ($("#rbEntireGroup").is(":checked")) {
+
+                $("#rbInstructor").prop('checked', false);
+            }
+        });
+        $("#rbInstructor").click(function () {
+            if ($("#rbInstructor").is(":checked")) {
+                $("#rbEntireGroup").prop('checked', false);
+            }
+        });
+        $("#rbAnonymous").click(function () {
+            if ($("#rbAnonymous").is(":checked")) {
+
+                $("#rbName").prop('checked', false);
+            }
+        });
+        $("#rbName").click(function () {
+            if ($("#rbName").is(":checked")) {
+                $("#rbAnonymous").prop('checked', false);
+            }
+        });
+
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("HomePage", "Home")';
+
+        });
+
+        $("#btnPost").click(function () {
+            var postto = "";
+            var title = $("#txtTopicTitle").val();
+            var desc = $("#txtTopicDescription").val();
+            var postby = "";
+            var groupId = $("#groupId").val();
+
+            if ($("#rbEntireGroup").is(":checked"))
+            { postto = "Group"; }
+            else {
+                postto = "Instructors";
+            }
+
+            if ($("#rbName").is(":checked"))
+            { postby = "Name"; }
+            else {
+                postby= "Anonymous";
+            }
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("NewPost", "Home")',
+                data: JSON.stringify({ postto: postto, title: title, desc: desc, postby: postby, groupId: groupId }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    if (data == "Success") {
+                        window.location.href = '@Url.Action("HomePage", "Home")';
+                    } 
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+    });
+</script>
+@using (Html.BeginForm("NewPost", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.HiddenFor(m => m.GroupId, new {@id="groupId"})
+    <div style="margin-right:35%;margin-left:20%;background-color:#e4e5e9; align-content:center;align-self:auto;vertical-align:middle;border:groove">
+        @if (TempData["FailureMsg"] != null)
+        {<div style="text-align:center;color:green;font-size:14px"><span><label> @TempData["FailureMsg"]</label></span></div>}
+        <table style="margin-left:130px">
+            <tbody>
+                <tr style="height:20px"></tr>
+            <tr >
+                <td>
+                    @Html.LabelFor(m => m.PostedTo, new { @id = "lblPostedTo" })
+                </td>
+                <td style="padding-left:30px">
+                    @Html.RadioButton("rbEntireGroup", "", true, new { @id = "rbEntireGroup",@class= "radiobutn1" })
+                    <label style="padding-left:0.5%">Entire Group</label>
+                </td>
+                <td style="padding-left:10px">
+                    @Html.RadioButton("rbInstructor", new { @id = "rbInstructor", @class = "radiobutn1" })
+                    <label style="padding-left:0.5%">Instructor(s)</label>
+                </td>
+            </tr>
+                <tr style="height:30px"></tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.TopicTitle, new { @id = "lblTopicTitle" })
+                </td>
+                <td colspan="2"style="padding-left:35px">
+                    @Html.TextAreaFor(m => m.TopicTitle, new { @id = "txtTopicTitle", @MaxLength = "100",@rows="2" })
+                </td>
+            </tr>
+                <tr style="height:30px"></tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.TopicDescription, new { @id = "lblTopicDescription" })
+                </td>
+                <td colspan="2" style="padding-left:35px">
+                    @Html.TextAreaFor(m => m.TopicDescription, new { @id = "txtTopicDescription", @MaxLength = "3000", @rows = "10" })
+                </td>
+            </tr>
+                <tr style="height:30px"></tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.PostedBy, new { @id = "lblPostedBy" })
+                </td>
+                <td style="padding-left:35px">
+                    @Html.RadioButton("rbName", "", true, new { @id = "rbName" })
+                    <label style="padding-left:0.5%">Self</label>
+                </td>
+                <td style="padding-left:10px">
+                    @Html.RadioButton("rbAnonymous", new { @id = "rbAnonymous" })
+                    <label style="padding-left:0.5%">Anonymous</label>
+                </td>
+            </tr>
+                <tr style="height:30px"></tr>
+                <tr style="height:30px"></tr>
+            <tr>
+                <td></td>
+                <td style="padding-left:35px">
+                    <input type="button" class="btn btn-default" value="Post" id="btnPost" />
+                </td>
+                <td style="padding-left:5px">
+                    <input type="button" class="btn btn-default" value="Cancel" id="btnCancel" />
+                </td>
+            </tr>
+                <tr style="height:30px"></tr>
+                </tbody>
+        </table>       
+    </div>
+
+}

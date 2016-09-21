@@ -1,0 +1,137 @@
+﻿@model Discuss.Models.Group
+
+@{
+    ViewBag.Title = "Create Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<script>
+    $(document).ready(function () {
+       // try using tempdata
+        //if ($(document).ready) {
+        //      $("#ddlUniversity").prepend("<option value=''selected='selected'>------Please select a University------</option>");
+        //      $("#ddlDepartment").prepend("<option value=''  selected='selected'>------Please select a Department------</option>");
+        //      $("#ddlCourse").prepend("<option value='' selected='selected'>------Please select a Course------</option>");
+        //     }
+
+              
+
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("HomePage", "Home")';
+        });
+
+        $("#btnCreateGroup").click(function (e) {
+
+            var university = $("#ddlUniversity").val();
+            var depart = $("#ddlDepartment").val();
+            var term = $("#ddlTerm").val();
+            var course = $("#ddlCourse").val();
+            if ($("#txtEnroll").val() == "") {
+                $("#txtEnroll").val(25); // set default value for max enrollment
+            }
+            if (university == "" && depart == "" && term == "" && course == "") {
+                e.preventDefault();
+                alert("All the fields other than Estimate Enrollment are mandatory.");
+               
+                return false;
+            }
+
+            if (university == "" || depart == "" || term == "" || course == "") {
+                e.preventDefault();
+                alert("All the fields other than Estimate Enrollment are mandatory.");
+                return false;
+            }
+        });
+    });
+</script>
+
+
+@using (Html.BeginForm("CreateGroup", "Home", FormMethod.Post, new { @role = "form" }))
+{
+    <fieldset>
+        <div style="background-color:#e4e5e9; align-content:center;align-self:auto;margin-left:10%;margin-right:35%; height:60%;margin-bottom:20%; vertical-align:middle">
+            @if (TempData["successMsg"] != null)
+            {<div style="text-align:center;color:green;font-size:14px"><span><label> @TempData["successMsg"]</label></span></div>}
+            @if (TempData["ErrorMsg"] != null)
+            {<div style="text-align:center;color:red;font-size:14px"><span><label> @TempData["ErrorMsg"]</label></span></div>}
+            <table class="new-table">
+                <tbody>
+                    <tr style="height:30px"></tr>
+                    <tr style="text-align:center"><td colspan="2">@Html.ValidationMessageFor(m => m.groupname, "", new { @class = "text-danger" })</td></tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.groupname, new { @id = "lblGroupName" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.groupname, new { @class = "new-form-control", id = "txtGroupName", placeholder = "Group Name" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.estimateEnrollment, new { @id = "lblEnroll" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.estimateEnrollment, new { @class = "new-form-control", id = "txtEnroll", placeholder = "Estimate Enrollment value" })
+                         
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.university, new { @id = "lblUniversity" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.university, Model.UniversityList, new { @class = "new-form-control", id = "ddlUniversity" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.department, new { @id = "lblDepartment", @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.department, Model.DepartmentList, new { @class = "new-form-control", id = "ddlDepartment" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.term, new { @id = "lblTerm", @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.term, Model.TermList, new { @class = "new-form-control", id = "ddlTerm" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(m => m.courseCode, new { @id = "lblCourse", @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.courseCode, Model.CourseList, new { @class = "new-form-control", id = "ddlCourse" })
+                        </td>
+                    </tr>
+                    <tr style="height:25px"></tr>
+                    <tr>
+                        <td>
+                            <input type="submit" class="btn btn-default" value="Create Group" id="btnCreateGroup" />
+                        </td>
+                        <td>
+                            <input type="button" class="btn btn-default" value="Cancel" id="btnCancel" />
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

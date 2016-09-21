@@ -1,0 +1,120 @@
+﻿@model Discuss.Models.SearchGroup
+@{
+    ViewBag.Title = "Search Groups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<h3 style="padding-left:16%">@ViewBag.Title</h3>
+
+
+<script>
+    $(document).ready(function () {
+      
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("HomePage", "Home")';
+        });
+       
+          
+        $("#btnSearchGroup").click(function () {
+            var university = $("#ddlUniversity").val();
+            var depart = $("#ddlDepartment").val();
+            var term = $("#ddlTerm").val();
+            var course = $("#ddlCourse").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("SearchGroups", "Home")',
+                data: JSON.stringify({ university: university, department: depart, term: term, course: course }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) { $("#content").html(data); },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+    });
+</script>
+@using (Html.BeginForm("SearchGroups", "Home", FormMethod.Post, new { @role = "form" }))
+{
+   @Html.HiddenFor(m => m.grpResultCount, new { @id = "txtCount" })
+    <fieldset>
+        <div style="background-color:#e4e5e9; align-content:center;align-self:auto;margin-left:25%;margin-right:25%; height:40%;margin-bottom:5%; vertical-align:middle">
+            <table class="new-table">
+                <tbody>
+                    <tr style="height:30px"></tr>
+                    <tr>
+                        <td style="padding-left:10%">
+                            @Html.LabelFor(m => m.University, new { @id = "lblUniversity" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.University, Model.UniversityList, new { @class = "new-form-control", id = "ddlUniversity" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td style="padding-left:10%">
+                            @Html.LabelFor(m => m.Department, new { @id = "lblDepartment", @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Department, Model.DepartmentList, new { @class = "new-form-control", id = "ddlDepartment" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td style="padding-left:10%">
+                            @Html.LabelFor(m => m.Term, new { @id = "lblTerm", @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Term, Model.TermList, new { @class = "new-form-control", id = "ddlTerm" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td style="padding-left:10%">
+                            @Html.LabelFor(m => m.Course, new { @id = "lblCourse", @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Course, Model.CourseList, new { @class = "new-form-control", id = "ddlCourse" })
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    <tr>
+                        <td style="padding-left:20%">
+                            <input type="button" class="btn btn-default" value="Search Groups" id="btnSearchGroup" />
+                        </td>
+                        <td style="padding-left:6%">
+                            <input type="button" class="btn btn-default" value="Cancel" id="btnCancel" />
+                        </td>
+                    </tr>
+                    <tr style="height:15px"></tr>
+                    @if (Convert.ToString(Session["Role"]) == "Instructor")
+                    {
+                        <tr>
+                            <td></td>
+                            <td style="padding-left:16%">
+
+                                @Html.ActionLink("Click here to create a new Group !", "CreateGroup")
+
+                            </td>
+
+                        </tr>
+                        <tr style="height:15px"></tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+          <div id="content" style="width:100%;background-color:#e4e5e9;overflow-x:hidden;overflow-y:auto; border:thin">    
+              @{Html.Partial("_SearchGrid",Model.GrpList);}     
+              </div>
+          
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

@@ -1,0 +1,80 @@
+﻿@model List<Discuss.Models.Group>
+<script>
+    $(document).ready(function () {
+        $(".btnjoin-leave").click(function (e) {
+            e.preventDefault();
+            var value = this.value;
+            var id = this.id;
+            var university = $("#ddlUniversity").val();
+            var depart = $("#ddlDepartment").val();
+            var term = $("#ddlTerm").val();
+            var course = $("#ddlCourse").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("JoinLeaveGroup", "Home")',
+                data: JSON.stringify({ action: value, id: id }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) { $("#content").html(data); },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+
+        $(".btnDelete").click(function (e) {
+            e.preventDefault();
+            var id = this.id;
+            var university = $("#ddlUniversity").val();
+            var depart = $("#ddlDepartment").val();
+            var term = $("#ddlTerm").val();
+            var course = $("#ddlCourse").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("DeleteGroup", "Home")',
+                data: JSON.stringify({ university: university, department: depart, term: term, course: course,id: id }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                    $("#content").html(data);
+                    alert("Group Deleted Succesfully !!");
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+
+    });
+</script>
+@{
+    var grid = new WebGrid(source:Model, canPage: true, canSort: true, rowsPerPage: 10);
+@grid.Pager(WebGridPagerModes.All);
+@grid.GetHtml(tableStyle: "web-grid-table",
+                  headerStyle: "webgrid-header",
+                  footerStyle: "webgrid-footer",
+                  alternatingRowStyle: "webgrid-alternating-row",
+                  rowStyle: "webgrid-row-style",
+                   fillEmptyRows: false,
+                  // htmlAttributes: new {id="searchgrid"},
+                  columns: grid.Columns(
+                           grid.Column(columnName: "groupname", header: "Group Name"), 
+                           grid.Column(columnName: "estimateEnrollment", header: "Total Enrollement"),
+                           grid.Column(columnName: "SeatsLeft", header: "Seats Left"),
+                           grid.Column(columnName: "term", header: "Term"),
+                           grid.Column(columnName: "Creator", header: "Created By"),
+                           grid.Column(header:"",format:@<text><span style="align-content:center">
+                           @if(item.IsMember){
+                           <input type="button" value="Leave" id="@item.id" style="width:70px" class="btnjoin-leave"/>
+                           }
+                           else{
+                           <input type="button" value="Join" id="@item.id" style="width:70px" class="btnjoin-leave"/>
+                           }
+                           @if (Convert.ToInt32(Session["id"]) == item.createdBy)
+                           {
+                            <input type="button" value="Delete" id="@item.id" style="width:70px;margin-left:5%" class="btnDelete" />
+                           }</span> </text>)
+                           ))
+    }

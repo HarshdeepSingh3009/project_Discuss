@@ -1,0 +1,185 @@
+﻿@model Discuss.Models.Post
+<style>
+
+    #ReplyTextArea {
+     max-width:100%;
+     height:195px;
+    }
+</style>
+
+<script>
+    $(document).ready(function(){
+        $("#replySubmit").click(function (e) {
+            e.preventDefault();
+            
+            var replyText = $("#ReplyTextArea").val();
+            if(replyText == "")
+            {
+                alert("Please Enter a message !!!");
+                return false;
+            }
+            var postid = $("#PostID").val();
+            var grpid = $("#ddlChangeTo").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("AddReplyToPost", "Home")',
+                data: JSON.stringify({ postid: postid, grpid: grpid, replyText: replyText }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                   $("#PostArea").html(data);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+
+        $(".btnReplyDel").click(function (e) {
+            e.preventDefault();
+            var rplyId = this.id;
+            var postid = $("#PostID").val();           
+            var grpid = $("#ddlChangeTo").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("DeleteReply", "Home")',
+                data: JSON.stringify({ postid: postid, grpid: grpid, replyId: rplyId }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                    $("#PostArea").html(data);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+
+        $(".btnPostDel").click(function (e) {
+            e.preventDefault();
+            var postid = this.id;
+            var grpid = $("#ddlChangeTo").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("DeletePost", "Home")',
+                data: JSON.stringify({ postid: postid, grpid: grpid }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    if (data == "Fail")
+                    {
+                        alert("Oops !! Something went wrong !! please try again later.");
+                        return false;}
+                   else if (data == "Success") {
+                        window.location.href = '@Url.Action("HomePage", "Home")';
+                    }
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+    });
+
+
+</script>
+@{
+    if (Model != null)
+    {
+        @Html.HiddenFor(m => m.id, new {@id="PostID" })
+        if (TempData["ErrorMsg"] != null)
+        {
+            <label class="alert-danger"> @TempData["ErrorMsg"]</label>;
+        }
+        <div id="postHeading" style="height:auto;border:groove">
+            <div style="height:80%; background-color:white;word-wrap:normal;overflow-wrap:break-word;border-style:groove;border-color:darkgray;padding-left:10px;vertical-align:middle">
+                <div><h4> Title: @Model.TopicTitle </h4></div>
+                <hr style="color:darkgray" />
+                <div> <h4><u>Description: </u><br /><br /> @Model.TopicDescription </h4></div>
+            </div>
+
+                <table style="color:cornflowerblue;background-color:#e4e5e9;width:100%">
+                    <tbody>
+                        <tr>
+                            <td style="float:left;padding-left:15px;width:25%">
+                                Posted by: @Model.PostedBy
+                            </td>
+
+                            <td style="float:left;padding-left:25px;width:25%">
+                                Posted on: @Model.PostedDate.ToString()
+                            </td>
+
+                            <td style="float:left;padding-left:25px;width:25%">
+                                Visible to: @Model.PostedTo
+                            </td>
+
+                            <td style="float:left;padding-left:15px;width:25%">
+                                @if (Model.PostedbyId == Convert.ToInt32(Session["Id"]))
+                                {
+                                <input type="button" value="Delete Post" id="@Model.id" class="btnPostDel" />
+                                }
+                                else
+                                {
+                                    <input type="button" value="Delete Post" id="@Model.id" class="btnPostDel" disabled="disabled"/>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+       </table>
+        </div>
+        <br />
+        if (Model.Replies != null && Model.Replies.Count > 0)
+        {
+            <div id="replyRegion" style="height:auto;max-height:35%; background-color:#e4e5e9;border:groove;color:darkgray;overflow-y:auto">
+                <h4>Answers/Followup Discussions</h4>
+                <div style="overflow-y:auto">
+                    @foreach (var reply in Model.Replies)
+                    {
+                        <div style="overflow-y:auto;background-color:white;color:black;overflow-wrap:break-word;border:groove">
+                            <div style="height:auto;border-bottom:groove">
+                                @reply.ReplyText
+                            </div>
+                            <table style="color:cornflowerblue;background-color:#e4e5e9;width:100%">
+                                <tbody>
+                                    <tr>
+                                        <td style="float:left;padding-left:15px;width:33%">
+                                            Posted by: @reply.PostedBy
+                                        </td>
+                                        <td style="float:left;padding-left:15px;width:33%">
+                                            Posted on: @reply.PostedDate.ToShortDateString()  @reply.PostedDate.ToShortTimeString()
+                                        </td>
+
+                                        <td style="float:left;padding-left:15px;width:33%">
+                                            <input type="button" value="Delete Reply" id=@reply.id class="btnReplyDel" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <br />
+        }
+        else {
+            <div id="NoReply" style="height:30%;float:left;border-bottom-style:groove;background-color:#e4e5e9;width:100%;border:groove;vertical-align:middle;text-align:center;margin-bottom:20px">
+                <h4>No one Replied to this Post yet !</h4>
+            </div>
+            <br />
+        }
+       
+        <div id="writeReply" style="height:auto;float:left;border-bottom-style:groove;background-color:#e4e5e9;width:100%;border:groove;margin-top:0%;padding-left:10px;padding-right:10px;">
+            <h4 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif"><u>Write a New Answer/Followup Discussion</u></h4>
+            <div style="height:auto;width:100%">
+                <textarea id="ReplyTextArea" style="width:100%;resize:none;overflow-x:auto;overflow-y:auto"></textarea>
+                </div>
+            <div style="text-align:right;padding-top:3px">
+                <input type="button" id="replySubmit" value="Reply" />
+            </div>
+        </div>
+    }
+}

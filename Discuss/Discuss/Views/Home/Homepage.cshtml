@@ -1,0 +1,173 @@
+﻿@model Discuss.Models.HomeModel
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#tabs").tabs();
+        $('a[data-toggle="tooltip"]').tooltip({
+            animated: 'fade',
+            placement: 'bottom',
+        });
+        $("#ddlChangeTo").change(function () {
+            var grpid = this.value;
+            $.ajax({
+                type: "Post",
+                async: true,
+                url: '@Url.Action("HomePage", "Home")',
+                data: JSON.stringify({ id: grpid }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                    $("#tabs-1").html(data);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+        $(".postTitle").click(function (e) {
+            e.preventDefault();
+            var postid = this.id;
+            var grpid = $("#ddlChangeTo").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("GetPostData", "Home")',
+                data: JSON.stringify({ postid: postid, grpid: grpid }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                    $("#PostArea").html(data);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+
+        $("#btnNewPost").click(function (e) {
+            e.preventDefault();
+            var grpid = $("#ddlChangeTo").val();
+            window.location.href = "NewPost?grpid=" + grpid;
+        });
+
+        $("#btnCreateGroup").click(function (e) {
+            e.preventDefault();
+            window.location.href = '@Url.Action("CreateGroup", "Home")';
+        });
+
+        $("#btnSearchGroups").click(function (e) {
+            e.preventDefault();
+            window.location.href = '@Url.Action("SearchGroups", "Home")';
+        });
+    });
+</script>
+@using (Html.BeginForm("HomePage", "Home", FormMethod.Post, new { @role = "form" }))
+{
+    <div style="margin-bottom:5%;width:100%;margin-top:-2%">
+        <div  style="width:30%;border:groove;height:800px; float:left">
+            <div id="divButtons" style="width:100%; margin-bottom:5px;background-color:#e4e5e9;padding-top:3px">
+                <table style="width:100%">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label id="lblGroups" style="padding-left:3px;padding-right:20px;margin-left:2%;margin-right:4%">Groups:</label>
+
+                                @Html.DropDownListFor(m => m.changeGroupTo, Model.groupNames, new { @id = "ddlChangeTo" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="width:100%">
+                    <tbody>
+                        <tr>
+                            <td style="width:33%">
+                                <input type="button" id="btnNewPost" value="Start a New Post" style="padding-left:10px" />
+                            </td>
+                            <td style="width:33%">
+                                @if (Convert.ToString(Session["Role"]) == "Instructor")
+                                {
+                                <input type="button" id="btnCreateGroup" value="Create new group" style="padding-left:10px" />
+                                }
+                            </td>
+                            <td style="width:33%">
+                                <input type="button" id="btnSearchGroups" value="Search Groups" style="padding-left:10px" />
+                                @*<input type="button" id="btnPrivatePost" value="Send a Private Message" style="padding-right:3%" />*@
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="tabs" style="width:100%;max-height:730px;height:725px;overflow-x:hidden;overflow-y:auto">   
+                      
+                    <ul>
+                        <li><a href="#tabs-1"><b>Posts</b></a></li>
+                    </ul>
+               
+                <div id="tabs-1">
+                    <div id="divPost">
+                        @if (Model.postList.Count > 0)
+                        {
+                            foreach (var pst in Model.postList)
+                            {
+                                <div style="border-bottom-style:groove;border-top-style:groove;float:left;width:100%;background-color:#e4e5e9">
+                                    <div style="width:100%;float:left">
+                                        <span>
+                                            <a href="" id=@pst.id class="postTitle">@pst.TopicTitle.ToUpperInvariant()</a>
+                                        </span>
+                                    </div>
+                                    <div style="width:100%">
+                                        @if (Convert.ToInt32(Session["id"]) == @pst.PostedbyId && @pst.PostedBy == "Anonymous")
+                                        {
+                                            <div style="width:50%;overflow-wrap:break-word;float:left">
+                                                Posted By:@Convert.ToString(Session["Name"])<a data-toggle="tooltip" title="As Anonymous" style="color:cornflowerblue"><u>(i)</u></a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="width:50%;overflow-wrap:break-word;float:left">
+                                                Posted By:
+                                                @pst.PostedBy
+                                            </div>
+                                        }
+                                        <div style="width:50%;float:right;padding-left:10px">
+
+                                            Date: @pst.PostedDate.ToString("g", System.Globalization.CultureInfo.CreateSpecificCulture("en-us"))
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="background-color:#e4e5e9;border:groove;color:darkgray;height:auto;width:100%;text-align:center;">
+                                <div style="vertical-align:middle;height:700px;margin-top:25%">
+                                    <h3>No Post yet !!! Be the First one to Post !!! </h3>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+            </div>
+
+        <div id="PostArea"style="width:70%;border:groove;height:800px; float:left">
+            <div style="background-color:#e4e5e9;border:groove;color:darkgray;height:auto;width:100%;text-align:center;">
+                <div style="vertical-align:middle;height:380px;margin-top:25%">
+                    <h3> Select a Post from a group to view all its content !!!!!</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+}

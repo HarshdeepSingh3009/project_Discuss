@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Default Web Site/DiscussPortal" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Harsh\\documents\\visual\ studio\ 2015\\Projects\\DISCUSS\\Discuss\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Harsh\\documents\\visual\ studio\ 2015\\Projects\\DISCUSS\\Discuss\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="DefaultConnection-Web.config Connection String" description="" value="Data Source=.\SQLExpress;Initial Catalog=DISCUSS;Integrated Security=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Harsh\\documents\\visual\ studio\ 2015\\Projects\\DISCUSS\\Discuss\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="DiscussDBContext-Web.config Connection String" description="" value="Data Source=.\SQLExpress;Initial Catalog=DISCUSS;Integrated Security=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Harsh\\documents\\visual\ studio\ 2015\\Projects\\DISCUSS\\Discuss\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DiscussDBContext']/@connectionString" />
+  </parameter>
+  <parameter name="DISCUSSEntities-Web.config Connection String" description="" value="metadata=res://*/Models.Model1.csdl|res://*/Models.Model1.ssdl|res://*/Models.Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=.\SQLExpress;Initial Catalog=DISCUSS;Integrated Security=True&quot;" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Harsh\\documents\\visual\ studio\ 2015\\Projects\\DISCUSS\\Discuss\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DISCUSSEntities']/@connectionString" />
+  </parameter>
+</parameters>

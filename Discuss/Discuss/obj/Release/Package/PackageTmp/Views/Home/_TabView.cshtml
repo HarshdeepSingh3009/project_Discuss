@@ -1,0 +1,78 @@
+﻿@model  List<Discuss.Models.Post>
+<script>
+    $(document).ready(function () {
+        $('a[data-toggle="tooltip"]').tooltip({
+            animated: 'fade',
+            placement: 'bottom',
+        });
+        $(".postTitle").click(function (e) {
+            e.preventDefault();
+            var postid = this.id;
+            var grpid = $("#ddlChangeTo").val();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: '@Url.Action("GetPostData", "Home")',
+                data: JSON.stringify({ postid: postid, grpid: grpid }),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (data) {
+                    $("#PostArea").html(data);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+    });
+</script>
+
+<div id="divPost">
+    @if (Model.Count > 0)
+            {
+                foreach (var pst in Model)
+                {
+            <div style="border-bottom-style:groove;border-top-style:groove;float:left;width:100%;background-color:#e4e5e9">
+                <div style="width:100%;float:left">
+                    <span>
+                        <a href="" id=@pst.id class="postTitle">@pst.TopicTitle.ToUpperInvariant()</a>
+                    </span>
+                </div>
+                <div style="width:100%">
+
+                    @if (Convert.ToInt32(Session["id"]) == @pst.PostedbyId && @pst.PostedBy == "Anonymous")
+                    {
+                        <div style="width:50%;overflow-wrap:break-word;float:left">
+                            Posted By:@Convert.ToString(Session["Name"])<a data-toggle="tooltip" title="As Anonymous" style="color:cornflowerblue"><u>(i)</u></a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="width:50%;overflow-wrap:break-word;float:left">
+                            Posted By:
+                            @pst.PostedBy
+                        </div>
+                    }
+
+
+                </div>
+                <div style="width:50%;float:right;padding-left:10px">
+
+                    Date: @pst.PostedDate.ToString("g", System.Globalization.CultureInfo.CreateSpecificCulture("en-us"))
+
+                </div>
+            </div>
+
+        
+        }
+    }
+    else
+    {
+        <div style="background-color:#e4e5e9;border:groove;color:darkgray;height:auto;width:100%;text-align:center;">
+            <div style="vertical-align:middle;height:700px;margin-top:25%">
+                <h3>No Post yet !!! Be the First one to Post !!! </h3>
+            </div>
+        </div>
+    }
+    </div>
+

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DepartmentList>
+  <Department Code="CS" Name="Computer Science">Computer Science-CS</Department>
+  <Department Code="IS" Name="Information System">Information System-IS</Department>
+  <Department Code="IA" Name="Information Assurance">Information Assurance-IA</Department>
+  <Department Code="HI" Name="Health Informatics"> Health Informatics-HI</Department>
+  <Department Code="EM" Name="Engineering Management">Engineering Management-EM</Department>
+  <Department Code="PE" Name="Physical Education">Physical Education-PE</Department>
+</DepartmentList>
